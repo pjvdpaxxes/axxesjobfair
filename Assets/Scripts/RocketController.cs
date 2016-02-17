@@ -5,10 +5,15 @@ public class RocketController : MonoBehaviour {
 
 	public float rocketForce = 75.0f;
 	private ParticleSystem ps;
+    public AudioClip burnSound;
+    private AudioSource source;
+    private float volLowRange = .5f;
+    private float volHighRange = 1.0f;
 
 	void Start () {
 		ps = (ParticleSystem) gameObject.transform.GetChild (0).gameObject.GetComponent<ParticleSystem>();
-		//ps = r.GetComponent<ParticleSystem> ();
+        //ps = r.GetComponent<ParticleSystem> ();
+        source = GetComponent<AudioSource>();
 	}
 
 	void Update () {
@@ -56,7 +61,9 @@ public class RocketController : MonoBehaviour {
 	void activateAfterburner(bool activate) {
 		if (activate) {
 			ps.Play ();
+            source.PlayOneShot(burnSound, 1F);
 		} else {
+            source.Stop();
 			ps.Stop ();
 		}
 	}
@@ -79,7 +86,7 @@ public class RocketController : MonoBehaviour {
 
 	void rotateUp() {
 		var rotationVector = transform.rotation.eulerAngles;
-		print (rotationVector.z); // Delete afterwards
+		//print (rotationVector.z); // Delete afterwards
 
 		if (rotationVector.z > 310)
 			return;
@@ -97,4 +104,17 @@ public class RocketController : MonoBehaviour {
 		rotationVector.z -= 1;
 		transform.rotation = Quaternion.Euler (rotationVector);
 	}
+
+    // Die by collision
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (!other.gameObject.name.Equals("ceiling"))
+            Die();
+    }
+
+    void Die()
+    {
+        source.Stop();
+        Time.timeScale = 0.0f;
+    }
 }
