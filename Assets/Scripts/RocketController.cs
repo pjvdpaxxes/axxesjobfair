@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class RocketController : MonoBehaviour {
 
@@ -115,6 +118,26 @@ public class RocketController : MonoBehaviour {
     void Die()
     {
         source.Stop();
-        Time.timeScale = 0.0f;
+		if (UpdateScore.score > PlayerPrefs.GetInt ("Highscore")) {
+			PlayerPrefs.SetInt ("Highscore", UpdateScore.score);
+			PlayerPrefs.SetInt ("BrokeHighscore", 1);
+			SaveHighscore ();
+		}
+		SceneManager.LoadScene ("StartMenu");
     }
+
+	public void SaveHighscore() {
+		BinaryFormatter BinForm = new BinaryFormatter(); 
+		FileStream file;
+
+		if (File.Exists (Application.persistentDataPath + "/gameInfo.dat")) {
+			file = File.Open (Application.persistentDataPath + "/gameInfo.dat", FileMode.Open); // if the file already exists it opens that file
+		}
+		else {
+			file = File.Create(Application.persistentDataPath + "/gameInfo.dat"); //creates a file
+		}
+
+		BinForm.Serialize (file, UpdateScore.score);
+		file.Close();
+	}
 }
