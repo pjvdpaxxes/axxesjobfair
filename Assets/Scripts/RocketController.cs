@@ -8,10 +8,12 @@ public class RocketController : MonoBehaviour {
 
 	public float rocketForce = 75.0f;
 	private ParticleSystem ps;
+	public GameObject explosion;
     public AudioClip burnSound;
     private AudioSource source;
     private float volLowRange = .5f;
     private float volHighRange = 1.0f;
+	private bool dead = false;
 
 	void Start () {
 		ps = (ParticleSystem) gameObject.transform.GetChild (0).gameObject.GetComponent<ParticleSystem>();
@@ -40,6 +42,9 @@ public class RocketController : MonoBehaviour {
 	}
 
 	void rocketMovement() {
+		if (dead)
+			return;
+
 		// Make rocket fly when LMB is pressed
 		bool rocketActive = false;
 		rocketActive = Input.GetButton("Fire1");
@@ -112,17 +117,25 @@ public class RocketController : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D other)
     {
         if (!other.gameObject.name.Equals("ceiling"))
-            Die();
+			StartCoroutine(Die());
     }
 
-    void Die()
+	IEnumerator Die()
     {
+		if (dead)
+			yield break;
+
+		dead = true;
+		Vector3 pos = transform.position;
+		GameObject exp_instance = (GameObject) Instantiate(explosion, pos, Quaternion.identity);
         source.Stop();
 		if (UpdateScore.score > PlayerPrefs.GetInt ("Highscore")) {
 			PlayerPrefs.SetInt ("Highscore", UpdateScore.score);
 			PlayerPrefs.SetInt ("BrokeHighscore", 1);
 			SaveHighscore ();
 		}
+		yield return new WaitForSeconds(2.3f);
+		Destroy (exp_instance);
 		SceneManager.LoadScene ("StartMenu");
     }
 
