@@ -10,6 +10,7 @@ public class RocketController : MonoBehaviour {
 	private ParticleSystem ps;
 	public GameObject explosion;
     public AudioClip burnSound;
+    public AudioClip coinSound;
     private AudioSource source;
     private float volLowRange = .5f;
     private float volHighRange = 1.0f;
@@ -116,8 +117,16 @@ public class RocketController : MonoBehaviour {
     // Die by collision
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (!other.gameObject.name.Equals("ceiling"))
-			StartCoroutine(Die());
+        if (!other.gameObject.tag.Equals("Ceiling") && !other.gameObject.tag.Equals("Coin")) {
+            StartCoroutine(Die());
+        }
+        else if(other.gameObject.tag.Equals("Coin"))
+        {
+            //source.clip = coinSound;
+            //source.Play();
+            Destroy(other.gameObject);
+            UpdateScore.score += 10;
+        }
     }
 
 	IEnumerator Die()
