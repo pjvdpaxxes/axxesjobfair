@@ -16,7 +16,7 @@ public class HighscoreController : MonoBehaviour {
 	}
 
 	public void SaveData() {
-		BinaryFormatter BinForm = new BinaryFormatter(); 
+		BinaryFormatter BinForm = new BinaryFormatter();
 		FileStream file;
 
 		if (File.Exists (Application.persistentDataPath + "/gameInfo.dat")) {
@@ -34,9 +34,9 @@ public class HighscoreController : MonoBehaviour {
 	public void LoadData() {
 		if (File.Exists (Application.persistentDataPath + "/gameInfo.dat")) { 
 			BinaryFormatter BinForm = new BinaryFormatter(); //creates a new variabe called "BinForm" that stores a "binary formatter" in charge of writing files to binary
-			FileStream file = File.Open (Application.persistentDataPath + "/gameInfo.dat", FileMode.Open); // if the file already exists it opens that file
-			int data = (int)BinForm.Deserialize(file); // deserialized the file and casts it to something we can understand (gamedata)binForm
-			file.Close(); // closes file
+			FileStream file = File.Open (Application.persistentDataPath + "/gameInfo.dat", FileMode.Open);
+			int data = (int)BinForm.Deserialize(file);
+			file.Close();
 			PlayerPrefs.SetInt("Highscore", data);
 		}
 	}

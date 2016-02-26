@@ -125,7 +125,7 @@ public class RocketController : MonoBehaviour {
             //source.clip = coinSound;
             //source.Play();
             Destroy(other.gameObject);
-            UpdateScore.score += 10;
+            UpdateScore.score += 100;
         }
     }
 
@@ -142,6 +142,9 @@ public class RocketController : MonoBehaviour {
 			PlayerPrefs.SetInt ("Highscore", UpdateScore.score);
 			PlayerPrefs.SetInt ("BrokeHighscore", 1);
 			SaveHighscore ();
+		} else {
+			PlayerPrefs.SetInt ("BrokeHighscore", 0);
+			PlayerPrefs.SetInt ("Score", UpdateScore.score);
 		}
 		yield return new WaitForSeconds(2.3f);
 		Destroy (exp_instance);

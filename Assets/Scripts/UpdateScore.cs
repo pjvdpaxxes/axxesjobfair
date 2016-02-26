@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class UpdateScore : MonoBehaviour {
-    public static GUIText scoreText;
+    public static Text scoreText;
     public static int score;
 
     // Use this for initialization
     void Start () {
-        scoreText = GetComponent<GUIText>();
+		scoreText = GetComponent<Text>();
         score = 0;
         PrintScore();
     }
@@ -19,7 +20,7 @@ public class UpdateScore : MonoBehaviour {
 
     public void PrintScore()
     {
-        scoreText.text = "Distance : " + score;
+        scoreText.text = "Score : " + score;
         score++;
         Invoke("PrintScore", 0.5f);
     }
