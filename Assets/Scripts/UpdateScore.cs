@@ -3,12 +3,12 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class UpdateScore : MonoBehaviour {
-    public static Text scoreText;
+    public static GUIText scoreText;
     public static int score;
 
     // Use this for initialization
     void Start () {
-		scoreText = GetComponent<Text>();
+		scoreText = GetComponent<GUIText>();
         score = 0;
         PrintScore();
     }
